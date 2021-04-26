@@ -9,6 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "@discordjs/opus": "github:discordjs/opus",
+    "axios": "^0.21.1",
+    "discord.js": "^12.5.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "ffmpeg-static": "^4.3.0",
+    "google-tts-api": "^2.0.2",
+    "node-schedule": "^2.0.0",
+    "ytdl-core": "^4.5.0"
   }
 }
