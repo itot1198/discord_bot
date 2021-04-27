@@ -14,7 +14,6 @@ const chaplusUrl = "https://www.chaplus.jp/v1/chat?apikey=5f4290de659e5";
 const googleTTS = require("google-tts-api");
 const mainChannelID = "775700380163244077";
 
-//サーバーをデーモン化させるための記述
 http
   .createServer(function(req, res) {
     if (req.method == "POST") {
@@ -94,9 +93,6 @@ const job_0 = schedule.scheduleJob("59 * * * *", async function() {
 //botを常駐化
 const job_2 = schedule.scheduleJob("1-58/2 * * * *", async function() {
   const connection = await client.channels.cache.get(mainChannelID).join();
-  const dispatcher = connection.play(
-    "https://cdn.glitch.com/ad861e70-7784-471b-98d3-59d0b761e7b1%2Fnothing.mp3?v=1616445729573"
-  );
 });
 
 client.on("voiceStateUpdate", async (oldState, newState) => {
