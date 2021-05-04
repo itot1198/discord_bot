@@ -69,21 +69,6 @@ const job_0 = schedule.scheduleJob("59 * * * *", async function() {
       slow: false,
       host: "https://translate.google.com"
     });
-    if (
-      Hour > -1 &&
-      Hour < 7 &&
-      client.guilds.cache.get("775700380163244073").members.guild.voiceStates.cache.get("483971493412470795").channelID === mainChannelID
-    ) {
-      url = googleTTS.getAudioUrl(
-        Hour +
-          "時です。ちゃさんがVCに接続しているのを確認しました。もう深夜ですよ",
-        {
-          lang: "ja-JP",
-          slow: false,
-          host: "https://translate.google.com"
-        }
-      );
-    }
     setTimeout(function() {
       connection.play(url, { volume: 1.0 });
     }, 15000);
