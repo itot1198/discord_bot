@@ -1,5 +1,6 @@
 require("./package.json");
 require("dotenv").config();
+const { prefix } = require("./config.json");
 const http = require("http");
 const querystring = require("querystring");
 const Discord = require("discord.js");
@@ -101,7 +102,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
       host: "https://translate.google.com",
     });
     const connection = await client.channels.cache.get(mainChannelID).join();
-    connection.play(url, { volume: 1.0 });
+    connection.play(url, { volume: 0.7 });
   } else if (
     newState.channelID !== mainChannelID &&
     oldState.channelID === mainChannelID
@@ -122,17 +123,17 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
       host: "https://translate.google.com",
     });
     const connection = await client.channels.cache.get(mainChannelID).join();
-    connection.play(url, { volume: 1.0 });
+    connection.play(url, { volume: 0.7 });
   }
 });
 
-client.on("message", async (msg) => {
+client.on("message", async (message) => {
   // ユーザーの発言に対して10%の確率でランダムなリアクションを返す(休止中)
   /* const prob = Math.floor(Math.random() * 100);
-  if (msg.content && prob < 10)
+  if (message.content && prob < 10)
     {
       //massageがBot以外の発言だったら
-      if (msg.author.id !== '780629853606510592'){
+      if (message.author.id !== '780629853606510592'){
        //絵文字のIDと名前を取得して配列に格納
        const emojiID = [];
        const emojiName = [];
@@ -143,43 +144,71 @@ client.on("message", async (msg) => {
        const arrayIndex = Math.floor(Math.random() * arrayLength);
        const reactionEmoji = "<:" + emojiName[arrayIndex] + ":" + emojiID[arrayIndex] + ">";
        //リアクションを実行
-       msg.react(reactionEmoji)
+       message.react(reactionEmoji)
       }
     }*/
 
   // ミュート中のユーザーが聞き専にテキストを送信した場合は読み上げる
   if (
-    msg.member.voice.channel &&
-    msg.member.guild.voiceStates.cache.get(msg.author.id).selfMute &&
-    !msg.content.match(/http/) &&
-    !msg.content.match(/@/)
+    message.member.voice.channel &&
+    message.member.guild.voiceStates.cache.get(message.author.id).selfMute &&
+    !message.content.startsWith(prefix) &&
+    !message.content.match(/http/) &&
+    !message.content.match(/@/)
   ) {
-    const url = googleTTS.getAudioUrl(msg.content, {
+    const url = googleTTS.getAudioUrl(message.content, {
       lang: "ja-JP",
       slow: false,
       host: "https://translate.google.com",
     });
     const connection = await client.channels.cache.get(mainChannelID).join();
-    connection.play(url, { volume: 1.0 });
-  }
+    connection.play(url, { volume: 0.5 });
+  } else if (message.content.startsWith(prefix)) {
+    const args = message.content.slice(prefix.length).split(/ +/);
+    const command = args.shift().toLowerCase();
 
-  // #+特定の発言に対して決まった返事をする
-  if (msg.content.match(/#/)) {
-    // #+上記のリストに存在しない単語が送信された場合対話APIを利用して適当な返事をする
-    const dialogue_options = {
-      utterance: msg.content,
-      agentState: {
-        agentName: "あしたからがんばるbot",
-        age: "17歳",
-        tone: "normal",
-      },
-    };
-    await axios
-      .post(chaplusUrl, JSON.stringify(dialogue_options))
-      .then(function (response) {
-        const data = response.data;
-        console.log(data.bestResponse.utterance);
-        msg.channel.send(data.bestResponse.utterance);
-      });
+    if (command === "talk" || command === "t") {
+      const dialogue_options = {
+        utterance: message.content.slice(prefix.length + command.length + 1),
+        agentState: {
+          agentName: "あしたからがんばるbot",
+          age: "17歳",
+          tone: "normal",
+        },
+      };
+      await axios
+        .post(chaplusUrl, JSON.stringify(dialogue_options))
+        .then(function (response) {
+          const data = response.data;
+          console.log(data.bestResponse.utterance);
+          message.channel.send(data.bestResponse.utterance);
+        });
+    } else if (command === "info") {
+      const exampleEmbed = new Discord.MessageEmbed()
+        .setColor("#0099ff")
+        .setTitle("基本情報")
+        .setAuthor(
+          "あしたからがんばるbot",
+          "https://drive.google.com/file/d/11ClF8BaDod54z3tDNOUSDyT-4hi4DckS/view?usp=sharing"
+        )
+        .setDescription("Some description here")
+        .setThumbnail("https://i.imgur.com/wSTFkRM.png")
+        .addFields(
+          { name: "Regular field title", value: "Some value here" },
+          { name: "\u200B", value: "\u200B" },
+          {
+            name: "Inline field title",
+            value: "Some value here",
+            inline: true,
+          },
+          { name: "Inline field title", value: "Some value here", inline: true }
+        )
+        .addField("Inline field title", "Some value here", true)
+        .setImage("https://i.imgur.com/wSTFkRM.png")
+        .setTimestamp()
+        .setFooter("Some footer text here", "https://i.imgur.com/wSTFkRM.png");
+
+      message.channel.send(exampleEmbed);
+    }
   }
 });
