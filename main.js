@@ -14,6 +14,32 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 const chaplusUrl = "https://www.chaplus.jp/v1/chat?apikey=5f4290de659e5";
 const googleTTS = require("google-tts-api");
 const mainChannelID = "775700380163244077";
+const jihou = [
+  [0, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [1, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [2, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [3, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [4, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [5, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [6, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [7, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [8, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [9, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [10, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [11, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [12, "https://www.youtube.com/watch?v=m-Ago7Sey4k", 25, 58],
+  [13, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [14, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [15, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [16, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [17, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [18, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [19, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [20, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [21, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [22, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+  [23, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
+];
 
 http
   .createServer(function (req, res) {
@@ -51,20 +77,19 @@ client.on("ready", () => {
   client.user.setPresence({ activity: { name: "あしたからがんばる" } });
 });
 
-// 毎時０分に時報音を再生する
+// 毎時0分に時報音を再生する
 schedule.scheduleJob("59 * * * *", async function () {
   const connection = await client.channels.cache.get(mainChannelID).join();
-
+  const Hour = new Date(
+    Date.now() + (new Date().getTimezoneOffset() + 10 * 60) * 60 * 1000
+  ).getHours();
   setTimeout(function () {
     connection.play(
-      ytdl("https://www.youtube.com/watch?v=ZD-eWcKYRYU", {
+      ytdl(jihou[Hour][1], {
         filter: "audioonly",
       }),
       { volume: 0.1 }
     );
-    const Hour = new Date(
-      Date.now() + (new Date().getTimezoneOffset() + 10 * 60) * 60 * 1000
-    ).getHours();
     const url = googleTTS.getAudioUrl(Hour + "時です", {
       lang: "ja-JP",
       slow: false,
@@ -72,8 +97,8 @@ schedule.scheduleJob("59 * * * *", async function () {
     });
     setTimeout(function () {
       connection.play(url, { volume: 1.0 });
-    }, 15000);
-  }, 49000);
+    }, jihou[Hour][2] * 1000);
+  }, jihou[Hour][3] * 1000);
 });
 
 // botを常駐化
@@ -154,7 +179,8 @@ client.on("message", async (message) => {
     message.member.guild.voiceStates.cache.get(message.author.id).selfMute &&
     !message.content.startsWith(prefix) &&
     !message.content.match(/http/) &&
-    !message.content.match(/@/)
+    !message.content.match(/@/) &&
+    !message.content.startsWith("-p")
   ) {
     const url = googleTTS.getAudioUrl(message.content, {
       lang: "ja-JP",
