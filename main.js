@@ -223,7 +223,43 @@ client.on("message", async (message) => {
         //検索したいキーワード
         q: keyword,
       });
-      console.log(result);
+      const exampleEmbed = {
+        color: 0x0099ff,
+        title: "検索結果",
+        url: "https://www.google.com/search?q=" + keyword,
+        description: "「" + keyword + "」" + "の検索結果はこちらです",
+        thumbnail: {
+          url: "https://img.icons8.com/color/452/google-logo.png",
+        },
+        fields: [
+          {
+            name: ":one: " + result.data.items[0].title,
+            value: result.data.items[0].link,
+          },
+          {
+            name: ":two: " + result.data.items[1].title,
+            value: result.data.items[1].link,
+          },
+          {
+            name: ":three: " + result.data.items[2].title,
+            value: result.data.items[2].link,
+          },
+          {
+            name: ":four: " + result.data.items[3].title,
+            value: result.data.items[3].link,
+          },
+          {
+            name: ":five: " + result.data.items[4].title,
+            value: result.data.items[4].link,
+          },
+          {
+            name: "\u200b",
+            value: "\u200b",
+            inline: false,
+          },
+        ],
+      };
+      message.channel.send({ embed: exampleEmbed });
     }
   }
 });
