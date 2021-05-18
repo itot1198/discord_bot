@@ -160,7 +160,7 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
 
 client.on("message", async (message) => {
   // ユーザーの発言に対して10 % の確率でランダムなリアクションを返す(休止中);
-  const prob = Math.floor(Math.random() * 100);
+  /*const prob = Math.floor(Math.random() * 100);
   if (message.content && prob < 10) {
     //massageがBot以外の発言だったら
     if (message.author.id !== "780629853606510592") {
@@ -177,7 +177,7 @@ client.on("message", async (message) => {
       //リアクションを実行
       message.react(reactionEmoji);
     }
-  }
+  }*/
 
   // ミュート中のユーザーが聞き専にテキストを送信した場合は読み上げる
   if (
