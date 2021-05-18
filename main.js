@@ -159,25 +159,25 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
 });
 
 client.on("message", async (message) => {
-  // ユーザーの発言に対して10%の確率でランダムなリアクションを返す(休止中)
-  /* const prob = Math.floor(Math.random() * 100);
-  if (message.content && prob < 10)
-    {
-      //massageがBot以外の発言だったら
-      if (message.author.id !== '780629853606510592'){
-       //絵文字のIDと名前を取得して配列に格納
-       const emojiID = [];
-       const emojiName = [];
-       client.emojis.cache.map((e, x) => emojiID.push(x));
-       client.emojis.cache.map((e, x) => emojiName.push(e.name));
-       //乱数を使って絵文字をランダムに選ぶ
-       const arrayLength = emojiID.length - 1;
-       const arrayIndex = Math.floor(Math.random() * arrayLength);
-       const reactionEmoji = "<:" + emojiName[arrayIndex] + ":" + emojiID[arrayIndex] + ">";
-       //リアクションを実行
-       message.react(reactionEmoji)
-      }
-    }*/
+  // ユーザーの発言に対して10 % の確率でランダムなリアクションを返す(休止中);
+  const prob = Math.floor(Math.random() * 100);
+  if (message.content && prob < 10) {
+    //massageがBot以外の発言だったら
+    if (message.author.id !== "780629853606510592") {
+      //絵文字のIDと名前を取得して配列に格納
+      const emojiID = [];
+      const emojiName = [];
+      client.emojis.cache.map((e, x) => emojiID.push(x));
+      client.emojis.cache.map((e, x) => emojiName.push(e.name));
+      //乱数を使って絵文字をランダムに選ぶ
+      const arrayLength = emojiID.length - 1;
+      const arrayIndex = Math.floor(Math.random() * arrayLength);
+      const reactionEmoji =
+        "<:" + emojiName[arrayIndex] + ":" + emojiID[arrayIndex] + ">";
+      //リアクションを実行
+      message.react(reactionEmoji);
+    }
+  }
 
   // ミュート中のユーザーが聞き専にテキストを送信した場合は読み上げる
   if (
