@@ -278,7 +278,7 @@ client.on("message", async (message) => {
       for (let i = 0; i < 5; ++i) {
         message.channel.send(result.data.items[i].image.thumbnailLink);
       }
-    } else if (command === "wiki") {
+    } else if (command === "wiki" || command === "w") {
       let keyword = message.content.slice(prefix.length + command.length + 1);
       const list = await wiki.search(keyword);
       const page = await wiki.page(list.results[0]);
