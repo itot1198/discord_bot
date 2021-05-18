@@ -260,6 +260,23 @@ client.on("message", async (message) => {
         ],
       };
       message.channel.send({ embed: exampleEmbed });
+    } else if (command === "searchimg" || command === "si") {
+      let keyword = message.content.slice(prefix.length + command.length + 1);
+      let result = await customSearch.cse.list({
+        //APIキー
+        auth: process.env.GOOGLE_SEARCH_API_KEY,
+
+        //カスタムエンジン名ID
+        cx: process.env.SEARCH_ENGINE_ID,
+
+        //検索したいキーワード
+        q: keyword,
+
+        searchType: "image",
+      });
+      for (let i = 0; i < 5; ++i) {
+        message.channel.send(result.data.items[i].image.thumbnailLink);
+      }
     }
   }
 });
