@@ -15,7 +15,11 @@ const chaplusUrl = "https://www.chaplus.jp/v1/chat?apikey=5f4290de659e5";
 const googleTTS = require("google-tts-api");
 const mainChannelID = "775700380163244077";
 const { google } = require("googleapis");
+const { response } = require("express");
 const customSearch = google.customsearch("v1");
+const wiki = require("wikijs").default({
+  apiUrl: "http://ja.wikipedia.org/w/api.php",
+});
 const jihou = [
   [0, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
   [1, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
@@ -265,18 +269,25 @@ client.on("message", async (message) => {
       let result = await customSearch.cse.list({
         //APIキー
         auth: process.env.GOOGLE_SEARCH_API_KEY,
-
         //カスタムエンジン名ID
         cx: process.env.SEARCH_ENGINE_ID,
-
         //検索したいキーワード
         q: keyword,
-
         searchType: "image",
       });
       for (let i = 0; i < 5; ++i) {
         message.channel.send(result.data.items[i].image.thumbnailLink);
       }
+    } else if (command === "wiki") {
+      let keyword = message.content.slice(prefix.length + command.length + 1);
+      const list = await wiki.search(keyword);
+      const page = await wiki.page(list.results[0]);
+      const summary = await page.summary();
+      const exampleEmbed = new Discord.MessageEmbed()
+        .setTitle(list.results[0])
+        .setURL("https://ja.wikipedia.org/wiki/" + list.results[0])
+        .setDescription(summary);
+      message.channel.send({ embed: exampleEmbed });
     }
   }
 });
