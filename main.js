@@ -14,6 +14,8 @@ client.login(process.env.DISCORD_BOT_TOKEN);
 const chaplusUrl = "https://www.chaplus.jp/v1/chat?apikey=5f4290de659e5";
 const googleTTS = require("google-tts-api");
 const mainChannelID = "775700380163244077";
+const { google } = require("googleapis");
+const customSearch = google.customsearch("v1");
 const jihou = [
   [0, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
   [1, "https://www.youtube.com/watch?v=ZD-eWcKYRYU", 15, 49],
@@ -209,32 +211,19 @@ client.on("message", async (message) => {
           console.log(data.bestResponse.utterance);
           message.channel.send(data.bestResponse.utterance);
         });
-    } else if (command === "info") {
-      const exampleEmbed = new Discord.MessageEmbed()
-        .setColor("#0099ff")
-        .setTitle("基本情報")
-        .setAuthor(
-          "あしたからがんばるbot",
-          "https://drive.google.com/file/d/11ClF8BaDod54z3tDNOUSDyT-4hi4DckS/view?usp=sharing"
-        )
-        .setDescription("Some description here")
-        .setThumbnail("https://i.imgur.com/wSTFkRM.png")
-        .addFields(
-          { name: "Regular field title", value: "Some value here" },
-          { name: "\u200B", value: "\u200B" },
-          {
-            name: "Inline field title",
-            value: "Some value here",
-            inline: true,
-          },
-          { name: "Inline field title", value: "Some value here", inline: true }
-        )
-        .addField("Inline field title", "Some value here", true)
-        .setImage("https://i.imgur.com/wSTFkRM.png")
-        .setTimestamp()
-        .setFooter("Some footer text here", "https://i.imgur.com/wSTFkRM.png");
+    } else if (command === "search" || command === "s") {
+      let keyword = message.content.slice(prefix.length + command.length + 1);
+      let result = await customSearch.cse.list({
+        //APIキー
+        auth: process.env.GOOGLE_SEARCH_API_KEY,
 
-      message.channel.send(exampleEmbed);
+        //カスタムエンジン名ID
+        cx: process.env.SEARCH_ENGINE_ID,
+
+        //検索したいキーワード
+        q: keyword,
+      });
+      console.log(result);
     }
   }
 });
