@@ -194,7 +194,7 @@ client.on("message", async (message) => {
       host: "https://translate.google.com",
     });
     const connection = await client.channels.cache.get(mainChannelID).join();
-    connection.play(url, { volume: 0.5 });
+    connection.play(url, { volume: 1.0 });
   } else if (message.content.startsWith(prefix)) {
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
@@ -298,7 +298,7 @@ client.on("message", async (message) => {
         }
       );
       const connection = await client.channels.cache.get(mainChannelID).join();
-      connection.play(url, { volume: 0.5 });
+      connection.play(url, { volume: 1.0 });
     }
   }
 });
