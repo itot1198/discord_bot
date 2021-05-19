@@ -288,6 +288,17 @@ client.on("message", async (message) => {
         .setURL("https://ja.wikipedia.org/wiki/" + list.results[0])
         .setDescription(summary);
       message.channel.send({ embed: exampleEmbed });
+    } else if (command === "tts") {
+      const url = googleTTS.getAudioUrl(
+        message.content.slice(prefix.length + command.length + 1),
+        {
+          lang: "ja-JP",
+          slow: false,
+          host: "https://translate.google.com",
+        }
+      );
+      const connection = await client.channels.cache.get(mainChannelID).join();
+      connection.play(url, { volume: 0.5 });
     }
   }
 });
