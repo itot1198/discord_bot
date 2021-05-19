@@ -276,7 +276,7 @@ client.on("message", async (message) => {
         searchType: "image",
       });
       for (let i = 0; i < 5; ++i) {
-        message.channel.send(result.data.items[i].image.thumbnailLink);
+        message.channel.send(result.data.items[i].link);
       }
     } else if (command === "wiki" || command === "w") {
       let keyword = message.content.slice(prefix.length + command.length + 1);
