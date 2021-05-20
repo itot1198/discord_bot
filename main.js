@@ -275,9 +275,7 @@ client.on("message", async (message) => {
         q: keyword,
         searchType: "image",
       });
-      for (let i = 0; i < 5; ++i) {
-        message.channel.send(result.data.items[i].link);
-      }
+      message.channel.send(result.data.items[0].link);
     } else if (command === "wiki" || command === "w") {
       let keyword = message.content.slice(prefix.length + command.length + 1);
       const list = await wiki.search(keyword);
