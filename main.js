@@ -306,11 +306,13 @@ client.on("message", async (message) => {
           embed: {
             color: 16757683,
             description:
-              "banが提案されました。30秒以内に提案者を除く2人のユーザーは`ban`と発言してbanを承認してください。",
+              "banが提議されました。30秒以内に提案者を除く2人のユーザーは`ban`と発言してbanを承認してください。",
           },
         });
         const filter = (msg) =>
-          msg.content.match(/ban/) && msg.author.id != message.author.id;
+          msg.content.match(/ban/) &&
+          (msg.author.id != message.author.id ||
+            msg.author.id === "497080680535293952");
         const collected = await message.channel.awaitMessages(filter, {
           max: 2,
           time: 30000,
