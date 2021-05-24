@@ -297,6 +297,38 @@ client.on("message", async (message) => {
       );
       const connection = await client.channels.cache.get(mainChannelID).join();
       connection.play(url, { volume: 0.7 });
+    } else if (command === "ban") {
+      if (message.mentions.members.size === 1) {
+        const member = await message.mentions.members.first();
+        const id = member.user.id;
+        message.channel.send({
+          //あとで編集などができるようにawait（非同期処理）をつける
+          embed: {
+            color: 16757683,
+            description:
+              "banが提案されました。30秒以内に提案者を除く2人のユーザーは`ban`と発言してbanを承認してください。",
+          },
+        });
+        const filter = (msg) =>
+          msg.content.match(/ban/) && msg.author.id != message.author.id;
+        const collected = await message.channel.awaitMessages(filter, {
+          max: 2,
+          time: 30000,
+        });
+        const response = collected.first();
+        if (!response)
+          message.channel.send({
+            embed: {
+              description: "banは否決されました。",
+            },
+          });
+        message.guild.members.ban(id, { reason: response.content });
+        message.channel.send({
+          embed: {
+            description: `banが可決されました。<@${id}>をBANしました。`,
+          },
+        });
+      }
     }
   }
 });
