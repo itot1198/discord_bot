@@ -306,7 +306,7 @@ client.on("message", async (message) => {
             embed: {
               color: 16757683,
               description:
-                "BANが提議されましたが、このユーザーは私よりも上位または同等の権限を所持するためBANできません。",
+                "BANが提議されましたが、このユーザーは私よりも上位の権限を所持するためBANできません。",
             },
           });
         message.channel.send({
