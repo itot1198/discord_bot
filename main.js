@@ -306,7 +306,7 @@ client.on("message", async (message) => {
           embed: {
             color: 16757683,
             description:
-              "banが提議されました。30秒以内に提案者を除く2人のユーザーは`ban`と発言してbanを承認してください。",
+              "BANが提議されました。30秒以内に提案者を除く2人のユーザーは`ban`と発言してBANを承認してください。",
           },
         });
         const filter = (msg) =>
@@ -319,13 +319,13 @@ client.on("message", async (message) => {
         if (!response)
           message.channel.send({
             embed: {
-              description: "banは否決されました。",
+              description: "BANは否決されました。",
             },
           });
         message.guild.members.ban(id, { reason: response.content });
         message.channel.send({
           embed: {
-            description: `banが可決されました。<@${id}>をBANしました。`,
+            description: `BANが可決されました。<@${id}>をBANしました。`,
           },
         });
       }
