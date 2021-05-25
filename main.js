@@ -301,6 +301,10 @@ client.on("message", async (message) => {
       if (message.mentions.members.size === 1) {
         const member = await message.mentions.members.first();
         const id = member.user.id;
+        if (!member.bannable)
+          return message.channel.send(
+            "BANが提議されましたが、このユーザーは私よりも上位の権限を所持するためBANできません"
+          );
         message.channel.send({
           //あとで編集などができるようにawait（非同期処理）をつける
           embed: {
