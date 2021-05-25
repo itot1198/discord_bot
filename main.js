@@ -310,7 +310,7 @@ client.on("message", async (message) => {
           },
         });
         const filter = (msg) =>
-          msg.content.match(/ban/) && msg.author.id != message.author.id;
+          msg.content.match(/ban/i) && msg.author.id != message.author.id;
         const collected = await message.channel.awaitMessages(filter, {
           max: 2,
           time: 30000,
