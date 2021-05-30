@@ -13,7 +13,7 @@ rule.tz = "Asia/Tokyo";
 client.login(process.env.DISCORD_BOT_TOKEN);
 const chaplusUrl = "https://www.chaplus.jp/v1/chat?apikey=5f4290de659e5";
 const googleTTS = require("google-tts-api");
-const mainChannelID = "775700380163244077";
+const mainChannelID = "847158182257754116";
 const { google } = require("googleapis");
 const { response } = require("express");
 const customSearch = google.customsearch("v1");
@@ -215,67 +215,6 @@ client.on("message", async (message) => {
           console.log(data.bestResponse.utterance);
           message.channel.send(data.bestResponse.utterance);
         });
-    } else if (command === "search" || command === "s") {
-      let keyword = message.content.slice(prefix.length + command.length + 1);
-      let result = await customSearch.cse.list({
-        //APIキー
-        auth: process.env.GOOGLE_SEARCH_API_KEY,
-
-        //カスタムエンジン名ID
-        cx: process.env.SEARCH_ENGINE_ID,
-
-        //検索したいキーワード
-        q: keyword,
-      });
-      const exampleEmbed = {
-        color: 0x0099ff,
-        title: "検索結果",
-        url: "https://www.google.com/search?q=" + keyword,
-        description: "「" + keyword + "」" + "の検索結果はこちらです",
-        thumbnail: {
-          url: "https://img.icons8.com/color/452/google-logo.png",
-        },
-        fields: [
-          {
-            name: ":one: " + result.data.items[0].title,
-            value: result.data.items[0].link,
-          },
-          {
-            name: ":two: " + result.data.items[1].title,
-            value: result.data.items[1].link,
-          },
-          {
-            name: ":three: " + result.data.items[2].title,
-            value: result.data.items[2].link,
-          },
-          {
-            name: ":four: " + result.data.items[3].title,
-            value: result.data.items[3].link,
-          },
-          {
-            name: ":five: " + result.data.items[4].title,
-            value: result.data.items[4].link,
-          },
-          {
-            name: "\u200b",
-            value: "\u200b",
-            inline: false,
-          },
-        ],
-      };
-      message.channel.send({ embed: exampleEmbed });
-    } else if (command === "searchimg" || command === "si") {
-      let keyword = message.content.slice(prefix.length + command.length + 1);
-      let result = await customSearch.cse.list({
-        //APIキー
-        auth: process.env.GOOGLE_SEARCH_API_KEY,
-        //カスタムエンジン名ID
-        cx: process.env.SEARCH_ENGINE_ID,
-        //検索したいキーワード
-        q: keyword,
-        searchType: "image",
-      });
-      message.channel.send(result.data.items[0].link);
     } else if (command === "wiki" || command === "w") {
       let keyword = message.content.slice(prefix.length + command.length + 1);
       const list = await wiki.search(keyword);
@@ -297,46 +236,6 @@ client.on("message", async (message) => {
       );
       const connection = await client.channels.cache.get(mainChannelID).join();
       connection.play(url, { volume: 0.7 });
-    } else if (command === "ban") {
-      if (message.mentions.members.size === 1) {
-        const member = await message.mentions.members.first();
-        const id = member.user.id;
-        if (!member.bannable)
-          return message.channel.send({
-            embed: {
-              color: 16757683,
-              description:
-                "BANが提議されましたが、このユーザーは私よりも上位の権限を所持するためBANできません。",
-            },
-          });
-        message.channel.send({
-          //あとで編集などができるようにawait（非同期処理）をつける
-          embed: {
-            color: 16757683,
-            description:
-              "BANが提議されました。30秒以内に提案者を除く2人のユーザーは`ban`と発言してBANを承認してください。",
-          },
-        });
-        const filter = (msg) =>
-          msg.content.match(/ban/i) && msg.author.id != message.author.id;
-        const collected = await message.channel.awaitMessages(filter, {
-          max: 2,
-          time: 30000,
-        });
-        const response = collected.first();
-        if (!response)
-          message.channel.send({
-            embed: {
-              description: "BANは否決されました。",
-            },
-          });
-        message.guild.members.ban(id, { reason: response.content });
-        message.channel.send({
-          embed: {
-            description: `BANが可決されました。<@${id}>をBANしました。`,
-          },
-        });
-      }
     }
   }
 });
