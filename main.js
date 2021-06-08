@@ -99,11 +99,14 @@ schedule.scheduleJob("59 * * * *", async function () {
       }),
       { volume: 0.1 }
     );
-    const url = googleTTS.getAudioUrl(Hour + "時です バルセロナは" + Hour_b + "時です", {
-      lang: "ja-JP",
-      slow: false,
-      host: "https://translate.google.com",
-    });
+    const url = googleTTS.getAudioUrl(
+      Hour + "時です。バルセロナは" + Hour_b + "時です",
+      {
+        lang: "ja-JP",
+        slow: false,
+        host: "https://translate.google.com",
+      }
+    );
     setTimeout(function () {
       connection.play(url, { volume: 1.0 });
     }, jihou[Hour][2] * 1000);
