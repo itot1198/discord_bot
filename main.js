@@ -89,6 +89,9 @@ schedule.scheduleJob("59 * * * *", async function () {
   const Hour = new Date(
     Date.now() + (new Date().getTimezoneOffset() + 10 * 60) * 60 * 1000
   ).getHours();
+  const Hour_b = new Date(
+    Date.now() + (new Date().getTimezoneOffset() + 3 * 60) * 60 * 1000
+  ).getHours();
   setTimeout(function () {
     connection.play(
       ytdl(jihou[Hour][1], {
@@ -96,7 +99,7 @@ schedule.scheduleJob("59 * * * *", async function () {
       }),
       { volume: 0.1 }
     );
-    const url = googleTTS.getAudioUrl(Hour + "時です", {
+    const url = googleTTS.getAudioUrl(Hour + "時です バルセロナは" + Hour_b + "時です", {
       lang: "ja-JP",
       slow: false,
       host: "https://translate.google.com",
