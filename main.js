@@ -84,7 +84,7 @@ client.on("ready", () => {
 });
 
 // 毎時0分に時報音を再生する
-schedule.scheduleJob("59 * * * *", async function () {
+schedule.scheduleJob("5 * * * *", async function () {
   const connection = await client.channels.cache.get(mainChannelID).join();
   const Hour = new Date(
     Date.now() + (new Date().getTimezoneOffset() + 10 * 60) * 60 * 1000
@@ -100,7 +100,7 @@ schedule.scheduleJob("59 * * * *", async function () {
       { volume: 0.1 }
     );
     const url = googleTTS.getAudioUrl(
-      Hour + "時です。バルセロナは" + Hour_b + "時です",
+      Hour + "時です。バルセロナは，" + Hour_b + "時です",
       {
         lang: "ja-JP",
         slow: false,
